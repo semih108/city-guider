@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Map anzeigen</title>
+    <style>
+        /* Festlegen der Kartenhöhe, damit die Karte sichtbar ist */
+        #map {
+            height: 100vh; /* Nimmt die gesamte Bildschirmhöhe ein */
+            width: 100%; /* Nimmt die gesamte Bildschirmbreite ein */
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Karte</h1>
+    <div id="map"></div>
+
+    <script>
+        // Funktion zum Initialisieren der Karte
+        function initMap() {
+            // Erstellen der Karte und Setzen des Startstandorts
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 48.2082, lng: 16.3738 }, // Beispiel: Wien
+                zoom: 8 // Zoom-Stufe
+            });
+        }
+    </script>
+
+    <!-- Google Maps API Script mit eigenem API-Key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap" async defer></script>
+</body>
+</html>
