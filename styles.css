@@ -1,0 +1,29 @@
+#map {
+  height: 400px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+video {
+  width: 500px;
+  height: 400px;
+  object-fit: cover;
+}
+
+#gallery {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.gallery-item {
+  margin: 10px;
+  border: 2px solid #333;
+  padding: 10px;
+  text-align: center;
+}
+
+.gallery-item img {
+  max-width: 150px;
+  margin-bottom: 10px;
+}

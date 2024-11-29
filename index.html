@@ -5,47 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kamera und Google Maps</title>
-
-    <style>
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        video {
-            width: 500px;
-            height: 400px;
-            object-fit: cover;
-        }
-
-        #gallery {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .gallery-item {
-            margin: 10px;
-            border: 2px solid #333;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .gallery-item img {
-            max-width: 150px;
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-
     <h1>Google Karte</h1>
-    <div id="map"></div>
+    <div id="map" style="width: 100%; height: 500px;"></div>
 
     <h1>Kamera und Google Maps mit Standort</h1>
-
     <div>
         <video id="vid" autoplay muted></video>
     </div>
@@ -53,122 +20,14 @@
     <button id="openCamBtn">Kamera öffnen</button>
     <button id="captureBtn">Foto aufnehmen</button>
 
-    <div id="map"></div>
-
     <h2>Galerie</h2>
     <div id="gallery"></div>
 
-    <script>
-        // Funktion zum Initialisieren der Karte
-        function initMap() {
-            // Erstellen der Karte und Setzen des Startstandorts
-            const map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 48.2082, lng: 16.3738 }, // Beispiel: Wien
-                zoom: 8 // Zoom-Stufe
-            });
-        }
-
-
-        let map;
-        let userMarker;
-        let videoStream = null;
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const openCamBtn = document.getElementById("openCamBtn");
-            const captureBtn = document.getElementById("captureBtn");
-            const video = document.getElementById("vid");
-            const gallery = document.getElementById("gallery");
-            const mediaDevices = navigator.mediaDevices;
-
-            // Google Maps initialisieren und auf aktuellen Standort zentrieren
-            function initMap() {
-                map = new google.maps.Map(document.getElementById("map"), {
-                    center: { lat: 48.2082, lng: 16.3738 }, // Beispiel: Wien
-                    zoom: 14
-                });
-
-                // Ermitteln und Anzeigen des Benutzerstandorts
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const userLocation = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
-                            map.setCenter(userLocation);
-                            userMarker = new google.maps.Marker({
-                                position: userLocation,
-                                map: map,
-                                title: "Ihr Standort"
-                            });
-                        },
-                        () => {
-                            alert("Standort konnte nicht ermittelt werden.");
-                        }
-                    );
-                }
-            }
-
-            openCamBtn.addEventListener("click", () => {
-                mediaDevices
-                    .getUserMedia({
-                        video: true,
-                        audio: false
-                    })
-                    .then((stream) => {
-                        videoStream = stream;
-                        video.srcObject = stream;
-                        video.play();
-                    })
-                    .catch((error) => alert("Fehler beim Zugriff auf die Kamera: " + error));
-            });
-
-            captureBtn.addEventListener("click", () => {
-                if (videoStream) {
-                    // Bild aus dem Videostream aufnehmen
-                    const canvas = document.createElement("canvas");
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    const context = canvas.getContext("2d");
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const photoSrc = canvas.toDataURL("image/png");
-
-                    // Aktuellen Standort abrufen
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition((position) => {
-                            const photoLocation = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
-
-                            // Foto mit Standortinformationen anzeigen
-                            displayPhoto(photoSrc, photoLocation);
-                        });
-                    } else {
-                        alert("Geolocation wird von Ihrem Browser nicht unterstützt.");
-                    }
-                } else {
-                    alert("Die Kamera ist nicht aktiv. Bitte starten Sie zuerst die Kamera.");
-                }
-            });
-
-            function displayPhoto(photoSrc, location) {
-                const photoElement = document.createElement("div");
-                photoElement.classList.add("gallery-item");
-                photoElement.innerHTML = `
-                    <img src="${photoSrc}" alt="Aufgenommenes Foto">
-                    <p>Standort: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
-                `;
-                gallery.appendChild(photoElement);
-            }
-
-            // Karte initialisieren
-            initMap();
-        });
-    </script>
-
     <!-- Google Maps API Script mit eigenem API-Key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap"
+        async defer></script>
+
+    <script src="app.js"></script>
 </body>
 
 </html>
