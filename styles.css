@@ -1,29 +1,79 @@
+body {
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+  background-color: #d1ccea;
+  color: #333;
+}
+
 #map {
   height: 400px;
   width: 100%;
   margin-top: 20px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
 }
 
 video {
-  width: 500px;
-  height: 400px;
+  width: 100%;
+  max-width: 500px;
+  height: auto; /*Beibehaltung des Seitenverhältnisses*/
   object-fit: cover;
+  border-radius: 10px;
+  margin: 10px auto;
+  display: block; /*camera centered - wanted?*/
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
 }
+
+button {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 15px;
+  margin: 20px auto;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  background-color: rgb(60, 53, 76);
+  transition: transform 0.5s;
+}
+
+button:hover {
+  transform: scale(1.1);
+} 
 
 #gallery {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 10px;
+  justify-content: center;
+  margin: 10px auto;
 }
 
 .gallery-item {
   margin: 10px;
   border: 2px solid #333;
+  border-radius: 10px;
   padding: 10px;
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
 }
 
 .gallery-item img {
   max-width: 150px;
   margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+  #map {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 12px;
+    text-align: center;
+  }
 }

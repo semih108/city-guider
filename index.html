@@ -4,28 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamera und Google Maps</title>
+    <title>Mobile AR</title>
     <link rel="stylesheet" href="styles.css" />
+    <!-- Google Maps API Script mit eigenem API-Key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap" async defer></script>
 </head>
 
 <body>
+    <h1>Standortabhängige Infos </h1>
+    <h4>Auf dieser mobilen Webseite können Sie passend zu Ihrem Standort zusätzliche Informationen erhalten zum aktuellen Kamerabild.</h4>
     <h1>Google Karte</h1>
-    <div id="map" style="width: 100%; height: 500px;"></div>
+    <div id="map">
+        <!-- funktioniert noch nicht:
+        <gmp-map  
+            center="47.406985,9.745255"  
+            zoom="4"  map-id="FHV Dornbirn"  
+            style="height: 400px">  
+            <gmp-advanced-marker    
+                position="47.40504659055604,9.745655530489824"    
+                title="La Scarpetta, Dornbirn"  >
+            </gmp-advanced-marker>  
+            <gmp-advanced-marker    
+                position="47.40601130872607,9.741388946145118"    
+                title="Krankenhaus Dornbirn"  >
+            </gmp-advanced-marker>
+        </gmp-map>
+        -->    
+    </div>
 
     <h1>Kamera und Google Maps mit Standort</h1>
+    <button id="openCamBtn">Kamera öffnen</button>
     <div>
         <video id="vid" autoplay muted></video>
     </div>
     <br />
-    <button id="openCamBtn">Kamera öffnen</button>
     <button id="captureBtn">Foto aufnehmen</button>
 
     <h2>Galerie</h2>
     <div id="gallery"></div>
-
-    <!-- Google Maps API Script mit eigenem API-Key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap"
-        async defer></script>
 
     <script src="app.js"></script>
 </body>
