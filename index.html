@@ -4,28 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamera und Google Maps</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>Mobile AR</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>Google Karte</h1>
-    <div id="map" style="width: 100%; height: 500px;"></div>
+    <h1>Standortbasierte Informationen </h1>
+    <h4>Erhalten Sie auf dieser mobilen Webseite standortspezifische Zusatzinformationen in Echtzeit, passend zu den aktuellen Kamerabildern in Ihrer Umgebung.</h4>
+    <h2>Google Maps Standort</h2>
+    <div id="map"></div>
 
-    <h1>Kamera und Google Maps mit Standort</h1>
+    <h2>Kamera</h2>
+    <h4>Kamera aktivieren und Bilder machen, um Bildtitel, Koordinaten und zusätzliche Informationen automatisch zu erfassen.</h4>
+    <button id="openCamBtn">Kamera öffnen</button>
     <div>
         <video id="vid" autoplay muted></video>
     </div>
-    <br />
-    <button id="openCamBtn">Kamera öffnen</button>
-    <button id="captureBtn">Foto aufnehmen</button>
+    <button id="captureBtn" style="margin-top: 10px;">Foto aufnehmen</button>
 
     <h2>Galerie</h2>
     <div id="gallery"></div>
-
-    <!-- Google Maps API Script mit eigenem API-Key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap"
-        async defer></script>
 
     <script src="app.js"></script>
 </body>

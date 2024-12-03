@@ -3,6 +3,11 @@ let userMarker;
 let videoStream = null;
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Google Maps API script einfügen
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap`;
+    script.async = true;
+    document.head.appendChild(script);
     const openCamBtn = document.getElementById("openCamBtn");
     const captureBtn = document.getElementById("captureBtn");
     const video = document.getElementById("vid");
