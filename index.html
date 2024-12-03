@@ -11,28 +11,13 @@
 </head>
 
 <body>
-    <h1>Standortabhängige Infos </h1>
-    <h4>Auf dieser mobilen Webseite können Sie passend zu Ihrem Standort zusätzliche Informationen erhalten zum aktuellen Kamerabild.</h4>
-    <h1>Google Karte</h1>
-    <div id="map">
-        <!-- funktioniert noch nicht:
-        <gmp-map  
-            center="47.406985,9.745255"  
-            zoom="4"  map-id="FHV Dornbirn"  
-            style="height: 400px">  
-            <gmp-advanced-marker    
-                position="47.40504659055604,9.745655530489824"    
-                title="La Scarpetta, Dornbirn"  >
-            </gmp-advanced-marker>  
-            <gmp-advanced-marker    
-                position="47.40601130872607,9.741388946145118"    
-                title="Krankenhaus Dornbirn"  >
-            </gmp-advanced-marker>
-        </gmp-map>
-        -->    
-    </div>
+    <h1>Standortbasierte Informationen </h1>
+    <h4>Erhalten Sie auf dieser mobilen Webseite standortspezifische Zusatzinformationen in Echtzeit, passend zu den aktuellen Kamerabildern in Ihrer Umgebung.</h4>
+    <h2>Google Maps Standort</h2>
+    <div id="map"></div>
 
-    <h1>Kamera und Google Maps mit Standort</h1>
+    <h2>Kamera</h2>
+    <h4>Kamera aktivieren und Bilder machen, um Bildtitel, Koordinaten und zusätzliche Informationen automatisch zu erfassen.</h4>
     <button id="openCamBtn">Kamera öffnen</button>
     <div>
         <video id="vid" autoplay muted></video>
