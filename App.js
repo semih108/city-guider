@@ -1,6 +1,7 @@
 let map;
 let userMarker;
 let videoStream = null;
+let model; // TensorFlow.js-Modell
 
 document.addEventListener("DOMContentLoaded", () => {
     // Google Maps API script einfügen
@@ -8,13 +9,18 @@ document.addEventListener("DOMContentLoaded", () => {
     script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap`;
     script.async = true;
     document.head.appendChild(script);
+
     const openCamBtn = document.getElementById("openCamBtn");
     const captureBtn = document.getElementById("captureBtn");
     const video = document.getElementById("vid");
     const gallery = document.getElementById("gallery");
     const mediaDevices = navigator.mediaDevices;
+    var detectedObjectText;
 
-    // Google Maps initialisieren und auf aktuellen Standort zentrieren
+    // TensorFlow.js-Modell laden
+    loadModel();
+
+    // Google Maps initialisieren
     function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: 48.2082, lng: 16.3738 }, // Beispiel: Wien
@@ -56,6 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 videoStream = stream;
                 video.srcObject = stream;
                 video.play();
+                console.log("Video-Stream gestartet");
+                detectObjects(); // Starte Objekterkennung
             })
             .catch((error) => alert("Fehler beim Zugriff auf die Kamera: " + error));
     });
@@ -95,7 +103,44 @@ document.addEventListener("DOMContentLoaded", () => {
         photoElement.innerHTML = `
             <img src="${photoSrc}" alt="Aufgenommenes Foto">
             <p>Standort: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
+            <p>Erkanntes Objekt: ${detectedObjectText}</p>
         `;
         gallery.appendChild(photoElement);
+    }
+
+    async function loadModel() {
+        try {
+            model = await cocoSsd.load();
+            console.log("TensorFlow-Modell erfolgreich geladen!");
+        } catch (error) {
+            console.error("Fehler beim Laden des Modells:", error);
+        }
+    }
+
+    function detectObjects() {
+        // Überprüfen, ob das Modell und der Video-Stream bereit sind
+        if (model && video.readyState >= video.HAVE_ENOUGH_DATA) {
+            model.detect(video).then((predictions) => {
+                if (predictions.length > 0) {
+                    console.log("Erkannte Objekte:", predictions);
+                    const detectedObject = document.getElementById("detectedObject");
+                    detectedObject.innerHTML = `
+                    <p>Erkanntes Objekt: ${predictions[0].class}</p>
+                    <p>Punkte: ${predictions.length}</p>
+                    `;
+                    detectedObjectText = predictions[predictions.length -1].class;
+                } else {
+                    detectedObjectText = "Keine Objekte erkannt";
+                    console.log("Keine Objekte erkannt.");
+                }
+                drawPredictions(predictions);
+            }).catch((error) => console.error("Fehler bei der Objekterkennung:", error));
+    
+            requestAnimationFrame(detectObjects);
+        } else {
+            console.log("Video-Stream noch nicht bereit.");
+            // Überprüfe den Video-Stream erneut nach einer kurzen Verzögerung
+            setTimeout(detectObjects, 100);
+        }
     }
 });
