@@ -122,25 +122,30 @@ document.addEventListener("DOMContentLoaded", () => {
         if (model && video.readyState >= video.HAVE_ENOUGH_DATA) {
             model.detect(video).then((predictions) => {
                 if (predictions.length > 0) {
-                    console.log("Erkannte Objekte:", predictions);
+                    // Zugriff auf das letzte erkannte Objekt
+                    const lastPrediction = predictions[predictions.length - 1];
+                    const detectedClass = lastPrediction.class;
+                    const detectedScore = (lastPrediction.score * 100).toFixed(2); // Prozentwert mit 2 Dezimalstellen
+
+                    // UI aktualisieren
                     const detectedObject = document.getElementById("detectedObject");
-                    detectedObject.innerHTML = `
-                    <p>Erkanntes Objekt: ${predictions[0].class}</p>
-                    <p>Punkte: ${predictions.length}</p>
-                    `;
+                    if (detectedObject) {
+                        detectedObject.innerHTML = `
+                            <p>Letztes erkanntes Objekt: ${detectedClass}</p>
+                            <p>Wahrscheinlichkeit: ${detectedScore}%</p>
+                        `;
+                    }
                     detectedObjectText = predictions[predictions.length -1].class;
                 } else {
                     detectedObjectText = "Keine Objekte erkannt";
-                    console.log("Keine Objekte erkannt.");
                 }
-                drawPredictions(predictions);
-            }).catch((error) => console.error("Fehler bei der Objekterkennung:", error));
+            });
     
             requestAnimationFrame(detectObjects);
         } else {
             console.log("Video-Stream noch nicht bereit.");
             // Überprüfe den Video-Stream erneut nach einer kurzen Verzögerung
-            setTimeout(detectObjects, 100);
+            setTimeout(detectObjects, 1000);
         }
     }
 });
