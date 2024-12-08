@@ -1,6 +1,7 @@
 let map;
 let userMarker;
 let videoStream = null;
+let model; // TensorFlow.js-Modell
 
 document.addEventListener("DOMContentLoaded", () => {
     // Google Maps API script einfügen
@@ -14,9 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const video = document.getElementById("vid");
     const gallery = document.getElementById("gallery");
     const mediaDevices = navigator.mediaDevices;
+    var detectedObjectText;
     var userLocation;
 
-    // Google Maps initialisieren und auf aktuellen Standort zentrieren
+    // TensorFlow.js-Modell laden
+    loadModel();
+
+    // Google Maps initialisieren
     function initMap() {
         // Ermitteln und Anzeigen des Benutzerstandorts
         if (navigator.geolocation) {
@@ -58,6 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 videoStream = stream;
                 video.srcObject = stream;
                 video.play();
+                console.log("Video-Stream gestartet");
+                detectObjects(); // Starte Objekterkennung
             })
             .catch((error) => alert("Fehler beim Zugriff auf die Kamera: " + error));
     });
@@ -118,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <p>${infoName}</p>
             <p>${infoText}</p>
             <p>Standort: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
+            <p>Erkanntes Objekt: ${detectedObjectText}</p>
         `;
         gallery.appendChild(photoElement);
     
@@ -144,5 +152,46 @@ document.addEventListener("DOMContentLoaded", () => {
         marker.addListener("click", () => {
             infoWindow.open(map, marker);
         });
+    }
+
+    async function loadModel() {
+        try {
+            model = await cocoSsd.load();
+            console.log("TensorFlow-Modell erfolgreich geladen!");
+        } catch (error) {
+            console.error("Fehler beim Laden des Modells:", error);
+        }
+    }
+
+    function detectObjects() {
+        // Überprüfen, ob das Modell und der Video-Stream bereit sind
+        if (model && video.readyState >= video.HAVE_ENOUGH_DATA) {
+            model.detect(video).then((predictions) => {
+                if (predictions.length > 0) {
+                    // Zugriff auf das letzte erkannte Objekt
+                    const lastPrediction = predictions[predictions.length - 1];
+                    const detectedClass = lastPrediction.class;
+                    const detectedScore = (lastPrediction.score * 100).toFixed(2); // Prozentwert mit 2 Dezimalstellen
+
+                    // UI aktualisieren
+                    const detectedObject = document.getElementById("detectedObject");
+                    if (detectedObject) {
+                        detectedObject.innerHTML = `
+                            <p>Letztes erkanntes Objekt: ${detectedClass}</p>
+                            <p>Wahrscheinlichkeit: ${detectedScore}%</p>
+                        `;
+                    }
+                    detectedObjectText = predictions[predictions.length -1].class;
+                } else {
+                    detectedObjectText = "Keine Objekte erkannt";
+                }
+            });
+    
+            requestAnimationFrame(detectObjects);
+        } else {
+            console.log("Video-Stream noch nicht bereit.");
+            // Überprüfe den Video-Stream erneut nach einer kurzen Verzögerung
+            setTimeout(detectObjects, 1000);
+        }
     }
 });

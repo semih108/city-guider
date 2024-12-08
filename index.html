@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mobile AR</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
 </head>
 
 <body>
@@ -19,6 +21,7 @@
     <button id="openCamBtn">Kamera öffnen</button>
     <div>
         <video id="vid" autoplay muted></video>
+        <div id="detectedObject"></div>
     </div>
     <button id="captureBtn" style="margin-top: 10px;">Foto aufnehmen</button>
 
