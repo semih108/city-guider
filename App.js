@@ -8,24 +8,21 @@ document.addEventListener("DOMContentLoaded", () => {
     script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap`;
     script.async = true;
     document.head.appendChild(script);
+
     const openCamBtn = document.getElementById("openCamBtn");
     const captureBtn = document.getElementById("captureBtn");
     const video = document.getElementById("vid");
     const gallery = document.getElementById("gallery");
     const mediaDevices = navigator.mediaDevices;
+    var userLocation;
 
     // Google Maps initialisieren und auf aktuellen Standort zentrieren
     function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 48.2082, lng: 16.3738 }, // Beispiel: Wien
-            zoom: 14
-        });
-
         // Ermitteln und Anzeigen des Benutzerstandorts
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const userLocation = {
+                    userLocation = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
@@ -41,6 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             );
         }
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: userLocation,
+            zoom: 14
+        });
     }
 
     // Init Map aufrufen, wenn Google Maps geladen ist
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     };
 
                     // Foto mit Standortinformationen anzeigen
-                    displayPhoto(photoSrc, photoLocation);
+                    displayPhoto(photoSrc, userLocation);
                 });
             } else {
                 alert("Geolocation wird von Ihrem Browser nicht unterstützt.");
