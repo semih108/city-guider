@@ -144,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p><strong>${infoName}</strong></p>
                     <p>${infoText}</p>
                     <p>Koordinaten: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
+                    <p>Erkanntes Objekt: ${detectedObjectText}</p>
                 </div>
             `
         });
@@ -170,8 +171,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (predictions.length > 0) {
                     // Zugriff auf das letzte erkannte Objekt
                     const lastPrediction = predictions[predictions.length - 1];
-                    const detectedClass = lastPrediction.class;
-                    const detectedScore = (lastPrediction.score * 100).toFixed(2); // Prozentwert mit 2 Dezimalstellen
+                    const detectedClass = predictions[0].class;
+                    const detectedScore = (predictions[0].score * 100).toFixed(2); // Prozentwert mit 2 Dezimalstellen
 
                     // UI aktualisieren
                     const detectedObject = document.getElementById("detectedObject");
@@ -181,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <p>Wahrscheinlichkeit: ${detectedScore}%</p>
                         `;
                     }
-                    detectedObjectText = predictions[predictions.length -1].class;
+                    detectedObjectText = predictions[0].class;
                 } else {
                     detectedObjectText = "Keine Objekte erkannt";
                 }
