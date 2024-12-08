@@ -93,14 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Vorabgespeicherte Standortinformationen
     const locationInfo = [
-        { lat: 47.4061, lng: 9.7442, text: "Fachhochschule Vorarlberg: Ein führendes Zentrum für angewandte Wissenschaften in Dornbirn." },
+        { lat: 47.4061, lng: 9.7442, name: "Fachhochschule Vorarlberg", text: "Fachhochschule Vorarlberg: Ein führendes Zentrum für angewandte Wissenschaften in Dornbirn." },
         // Weitere Standorte und Informationen...
     ];
 
     function displayPhoto(photoSrc, location) {
-        const photoElement = document.createElement("div");
-        photoElement.classList.add("gallery-item");
-    
         // Suche nach der gespeicherten Info für diesen Standort
         const info = locationInfo.find(
             (loc) =>
@@ -109,13 +106,43 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     
         // Zeige die Information oder eine Standardnachricht an
-        const infoText = info ? info.text : "Keine Informationen für diesen Standort.";
+        const infoName = info ? info.name : "Unbekannter Standort";
+        const infoText = info ? info.text : "Keine Informationen vorhanden";
+
+        // Foto und Standort in der Galerie anzeigen
+        const photoElement = document.createElement("div");
+        photoElement.classList.add("gallery-item");
     
         photoElement.innerHTML = `
             <img src="${photoSrc}" alt="Aufgenommenes Foto">
-            <p>Standort: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
+            <p>${infoName}</p>
             <p>${infoText}</p>
+            <p>Standort: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
         `;
         gallery.appendChild(photoElement);
+    
+        // Marker auf der Karte setzen
+        const marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: `Foto aufgenommen bei ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`
+        });
+    
+        // InfoWindow mit Foto und Standortinformationen
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div class="info-window">
+                    <img src="${photoSrc}" alt="Foto">
+                    <p><strong>${infoName}</strong></p>
+                    <p>${infoText}</p>
+                    <p>Koordinaten: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
+                </div>
+            `
+        });
+    
+        // Öffne InfoWindow bei Klick auf den Marker
+        marker.addListener("click", () => {
+            infoWindow.open(map, marker);
+        });
     }
 });

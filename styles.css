@@ -64,6 +64,21 @@ button:hover {
   border-radius: 10px;
 }
 
+/* Spezifische Regeln für Google Maps InfoWindow */
+div.gm-style .info-window {
+  color: black !important; /* Priorisiert weiße Schrift */
+  font-family: 'Arial', sans-serif !important;
+  text-align: center !important;
+  margin: 10px !important;
+  border-radius: 8px !important;
+}
+
+div.gm-style .info-window img {
+  max-width: 150px !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px !important;
+}
+
 /* Responsive Design */
 
 @media (max-width: 768px) {
