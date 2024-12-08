@@ -113,22 +113,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const photoElement = document.createElement("div");
         photoElement.classList.add("gallery-item");
     
-        // Suche nach der gespeicherten Info für diesen Standort
-        const info = locationInfo.find(
-            (loc) =>
-                Math.abs(loc.lat - location.lat) < 0.01 &&
-                Math.abs(loc.lng - location.lng) < 0.01
-        );
-    
-        // Zeige die Information oder eine Standardnachricht an
-        const infoText = info ? info.text : "Keine Informationen für diesen Standort.";
-    
         photoElement.innerHTML = `
             <img src="${photoSrc}" alt="Aufgenommenes Foto">
             <p>${infoName}</p>
             <p>${infoText}</p>
             <p>Standort: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
-            <p>${infoText}</p>
         `;
         gallery.appendChild(photoElement);
     
