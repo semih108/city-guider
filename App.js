@@ -8,24 +8,21 @@ document.addEventListener("DOMContentLoaded", () => {
     script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBaxk6h2WzEGf-zD6bGYgoRomki4mTJw5U&callback=initMap`;
     script.async = true;
     document.head.appendChild(script);
+
     const openCamBtn = document.getElementById("openCamBtn");
     const captureBtn = document.getElementById("captureBtn");
     const video = document.getElementById("vid");
     const gallery = document.getElementById("gallery");
     const mediaDevices = navigator.mediaDevices;
+    var userLocation;
 
     // Google Maps initialisieren und auf aktuellen Standort zentrieren
     function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 48.2082, lng: 16.3738 }, // Beispiel: Wien
-            zoom: 14
-        });
-
         // Ermitteln und Anzeigen des Benutzerstandorts
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const userLocation = {
+                    userLocation = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
@@ -41,6 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             );
         }
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: userLocation,
+            zoom: 14
+        });
     }
 
     // Init Map aufrufen, wenn Google Maps geladen ist
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     };
 
                     // Foto mit Standortinformationen anzeigen
-                    displayPhoto(photoSrc, photoLocation);
+                    displayPhoto(photoSrc, userLocation);
                 });
             } else {
                 alert("Geolocation wird von Ihrem Browser nicht unterstützt.");
@@ -110,11 +112,23 @@ document.addEventListener("DOMContentLoaded", () => {
         // Foto und Standort in der Galerie anzeigen
         const photoElement = document.createElement("div");
         photoElement.classList.add("gallery-item");
+    
+        // Suche nach der gespeicherten Info für diesen Standort
+        const info = locationInfo.find(
+            (loc) =>
+                Math.abs(loc.lat - location.lat) < 0.01 &&
+                Math.abs(loc.lng - location.lng) < 0.01
+        );
+    
+        // Zeige die Information oder eine Standardnachricht an
+        const infoText = info ? info.text : "Keine Informationen für diesen Standort.";
+    
         photoElement.innerHTML = `
             <img src="${photoSrc}" alt="Aufgenommenes Foto">
             <p>${infoName}</p>
             <p>${infoText}</p>
             <p>Standort: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}</p>
+            <p>${infoText}</p>
         `;
         gallery.appendChild(photoElement);
     
